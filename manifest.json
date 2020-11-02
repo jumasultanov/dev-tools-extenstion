@@ -1,0 +1,34 @@
+{
+    "manifest_version": 2,
+    "name": "DevTools",
+    "description": "Developer tools manager",
+    "version": "0.0.1",
+    "permissions": [
+        "tabs",
+        "http://*",
+        "https://*"
+    ],
+    "content_scripts": [{ //Стили и скрипты на страницу
+        "matches": [
+            "http://*",
+            "https://*"
+        ],
+        "css":[
+            "page/css/app.css"
+        ],
+        "js": [
+            // page/source
+        ]
+    }],
+    "background": { //Фоновая страница
+        "page": "background/index.html"
+    },
+    "browser_action": { //Попап расширения
+        "default_title": "DevTools",
+        "default_popup": "popup/index.html"
+    },
+    "web_accessible_resources": [],
+    "icons": {
+        //Иконки
+    }
+  }
