@@ -5,30 +5,45 @@
     "version": "0.0.1",
     "permissions": [
         "tabs",
-        "http://*",
-        "https://*"
+        "contextMenus",
+        "clipboardRead",
+        "clipboardWrite",
+        "alarms",
+        "webRequest",
+        "webRequestBlocking",
+        "*://*/*"
     ],
-    "content_scripts": [{ //Стили и скрипты на страницу
+    "content_scripts": [{
         "matches": [
-            "http://*",
-            "https://*"
+            "*://*/*"
         ],
         "css":[
             "page/css/app.css"
         ],
         "js": [
-            // page/source
+            "page/source/functions.js",
+            "page/source/app.js",
+            "page/source/core/App.js",
+            "page/source/controller/MessageController.js",
+            "page/source/controller/ActionController.js",
+            "page/source/controller/KeyController.js",
+            "page/source/controller/CommanderController.js",
+            "page/source/controller/WindowController.js",
+            "page/source/model/Action.js",
+            "page/source/exception/Exception.js",
+            "page/source/exception/MessageException.js",
+            "page/source/exception/ActionException.js"
         ]
     }],
-    "background": { //Фоновая страница
+    "background": {
         "page": "background/index.html"
     },
-    "browser_action": { //Попап расширения
+    "browser_action": {
         "default_title": "DevTools",
         "default_popup": "popup/index.html"
     },
     "web_accessible_resources": [],
     "icons": {
-        //Иконки
+        
     }
-  }
+}
