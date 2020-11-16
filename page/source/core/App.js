@@ -7,7 +7,6 @@ class App {
         MessageController.connect();
         MessageController.getControlData()
             .then(data => {
-                console.log(data);
                 if (data.keys) KeyController.setActionKeys(data.keys);
             });
     }

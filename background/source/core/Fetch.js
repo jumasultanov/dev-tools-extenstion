@@ -1,3 +1,6 @@
+import Exception from '../exception/Exception.js';
+import FetchException from '../exception/FetchException.js';
+
 class Fetch {
 
     url;
@@ -32,18 +35,27 @@ class Fetch {
             };
             fetch(this.url, params)
                 .then(res => {
-                    if (res.status==200) return res.json();
+                    if (res.status==200) {
+                        let contentType = res.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return res.json();
+                        } else {
+                            return res.text();
+                        }
+                    } else throw new FetchException(FetchException.RESPONSE_CODE_ERROR, res.status);
                 })
                 .then(data => {
+                    if (typeof data == "string") throw new FetchException(FetchException.RESPONSE_TEXT, data);
                     let err = '';
                     if (data) {
                         if (data.error) err = data.error;
                         else resolve(data);
                     }
-                    if (err) reject(err);
+                    throw new FetchException(FetchException.RESPONSE_ERROR, err || 'Пустое значение');
                 })
                 .catch(err => {
-                    reject(err.message);
+                    if (err instanceof FetchException) reject(err);
+                    else reject(new FetchException(FetchException.FAILED));
                 });
         });
     }

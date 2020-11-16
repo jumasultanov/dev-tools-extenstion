@@ -17,9 +17,6 @@
         "matches": [
             "*://*/*"
         ],
-        "css":[
-            "page/css/app.css"
-        ],
         "js": [
             "page/source/functions.js",
             "page/source/app.js",
@@ -30,9 +27,14 @@
             "page/source/controller/CommanderController.js",
             "page/source/controller/WindowController.js",
             "page/source/model/Action.js",
+            "page/source/model/Block.js",
+            "page/source/model/Layer.js",
+            "page/source/model/Input.js",
             "page/source/exception/Exception.js",
             "page/source/exception/MessageException.js",
-            "page/source/exception/ActionException.js"
+            "page/source/exception/ActionException.js",
+            "page/source/exception/BlockException.js",
+            "page/source/exception/LayerException.js"
         ]
     }],
     "background": {
@@ -42,7 +44,10 @@
         "default_title": "DevTools",
         "default_popup": "popup/index.html"
     },
-    "web_accessible_resources": [],
+    "web_accessible_resources": [
+        "page/css/commander.css",
+        "page/css/window.css"
+    ],
     "icons": {
         
     }

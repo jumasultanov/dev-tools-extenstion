@@ -3,7 +3,9 @@ class MessageController {
     static items = {};
 
     static EVENTS = {
-        HOT_KEYS: 'hotKeys'
+        HOT_KEYS: 'hotKeys',
+        COMMANDER_LAYER: 'cmdLayer',
+        COMMAND_EXEC: 'cmdExec'
     };
 
     static connect() {
@@ -19,32 +21,22 @@ class MessageController {
             }, res => resolve(res));
         });
     }
-/*
-    static trigger(event, data, callback) {
-        if (!this.isExistEvent(event)) throw new MessageException(MessageException.EVENT_NOT_EXIST);
-        if (!(event in this.items)) return false;
-        this.items[event].forEach(ev => ev.run(data));
-        callback({error: 0});
-        return true;
-    }
 
-    static isExistEvent(event) {
-        return Object.values(this.EVENTS).some(value => value==event);
-    }
-
-    static send() {
-        chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-            console.log(response.farewell);
-            return true;
+    static getCommanderLayer() {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                event: this.EVENTS.COMMANDER_LAYER
+            }, res => resolve(res));
         });
     }
 
-    static on(event, target) {
-        
+    static commandExec(command) {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                event: this.EVENTS.COMMAND_EXEC,
+                data: { command }
+            }, res => resolve(res));
+        });
     }
 
-    static off(event, target) {
-
-    }
-*/
 }

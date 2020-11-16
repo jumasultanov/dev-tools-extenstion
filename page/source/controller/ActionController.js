@@ -9,4 +9,12 @@ class ActionController {
         }
     }
 
+    static apply(data) {
+        try {
+            Action.newCustom(data).run();
+        } catch (e) {
+            console.error(e.get());
+        }
+    }
+
 }

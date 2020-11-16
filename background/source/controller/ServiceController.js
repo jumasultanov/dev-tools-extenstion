@@ -15,6 +15,17 @@ class ServiceController {
             if (userData) app.user = new User(userData.id);
             let keys = data?.keys;
             if (keys) KeyController.set(keys);
+            /**
+             * TODO:
+             *      добавить еще параметров
+             */
+        }).catch(err => {
+            console.log(err);
+            /**
+             * TODO:
+             *      при вызове командной строки повесить уведомление о соединении
+             *      в попапе разширения также
+             */
         });
     }
 

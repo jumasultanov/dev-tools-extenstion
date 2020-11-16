@@ -11,7 +11,9 @@ class ContentController {
      * 
      */
     static events = {
-        hotKeys: [ContentController, 'getHotKeys']
+        hotKeys: [ContentController, 'getHotKeys'],
+        cmdLayer: [ContentController, 'getCmdLayer'],
+        cmdExec: [ContentController, 'cmdExec']
     }
 
     static connect() {
@@ -38,10 +40,23 @@ class ContentController {
         let result = {};
         if (item) {
             try {
-                result = item[0][item[1]].apply(item[0], [this.data]) || {};
+                result = item[0][item[1]].apply(item[0], [data]) || {};
+                if (result instanceof Promise) {
+                    result
+                        .then(data => {
+                            console.log(data);
+                            fn(data);
+                        })
+                        .catch(() => {
+                            let err = this.createMethodException(event, item);
+                            let pres = { error: err.get() };
+                            console.log(pres);
+                            fn(pres);
+                        });
+                    return false;
+                }
             } catch (e) {
-                let methodCall = `${event}: [${item[0].name}, ${item[1]}]`;
-                let err = new ContentException(ContentException.METHOD_CALL_ERROR, methodCall);
+                let err = this.createMethodException(event, item);
                 result.error = err.get();
             }
         } else {
@@ -52,10 +67,34 @@ class ContentController {
         fn(result);
     }
 
+    static createMethodException(event, item) {
+        let methodCall = `${event}: [${item[0].name}, ${item[1]}]`;
+        return new ContentException(ContentException.METHOD_CALL_ERROR, methodCall);
+    }
+
     static getHotKeys() {
-        console.log('GET HOT KEYS');
         return {
             keys: KeyController.items || null
+        }
+    }
+
+    static getCmdLayer() {
+        return new Promise((resolve, reject) => {
+            import('../template/Commander.js')
+                .then(module => module.layer)
+                .then(layer => resolve({layer}))
+                .catch(err => reject(err));
+        });
+    }
+
+    static cmdExec(obj) {
+        console.log(obj);
+        /**
+         * TODO:
+         * 
+         */
+        return {
+            test: 'WOW!'
         }
     }
 
