@@ -42,7 +42,18 @@ export let layer = [
                                 children: [
                                     {
                                         type: 'text',
-                                        text: 'Для открытия инструмента начните вводить его название или ключевые слова'
+                                        text: 'Для поиска инструмента начните вводить его название или ключевые слова'
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'element',
+                                name: 'div',
+                                attrs: { class: 'cmd-story-line' },
+                                children: [
+                                    {
+                                        type: 'text',
+                                        text: 'Для вывода всего списка наберите "all"'
                                     }
                                 ]
                             },
@@ -87,6 +98,11 @@ export let layer = [
                                 ]
                             }
                         ]
+                    },
+                    {
+                        type: 'element',
+                        name: 'div',
+                        attrs: { class: 'cmd-search-list' },
                     }
                 ]
             }

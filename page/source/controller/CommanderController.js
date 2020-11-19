@@ -4,6 +4,8 @@ class CommanderController {
     static text;
     static textInput;
     static caretInput;
+    static cmdLayer;
+    static fade;
     static inited = false;
     static fn = {};
     static caretTimer = null;
@@ -20,8 +22,11 @@ class CommanderController {
          * 3 - показать коммандную строку с историей ввода
          */
         if (this.layer) {
-            this.layer.view();
-            this.layerShowed();
+            this.layerBeforeInit()
+                .then(() => {
+                    this.text.clear();
+                    this.layerShow();
+                });
         } else {
             MessageController.getCommanderLayer()
                 .then(data => {
@@ -43,19 +48,23 @@ class CommanderController {
         if (this.layer) this.layerHide();
     }
 
-    static layerShowed() {
-        if (!this.inited) {
-            this.addStyles().then(() => {
-                this.layerInit();
-                /**
-                 * May be add scripts in future
-                 */
-            });
-            this.inited = true;
-        }
+    static layerBeforeInit() {
+        return new Promise((resolve, reject) => {
+            if (this.inited) {
+                resolve();
+            } else {
+                this.addStyles().then(() => {
+                    this.layerInit();
+                    resolve();
+                    /**
+                     * May be add scripts in future
+                     */
+                });
+                this.inited = true;
+            }
+        });
         /**
          * TODO:
-         *      Clear input
          *      Add story
          */
     }
@@ -88,18 +97,10 @@ class CommanderController {
     }
 
     static layerInit() {
-        /**
-         * TODO:
-         *  добавить слушателя по набору из клавиатуры
-         *  отбирать в выводить нужные [a-z0-9-_="]
-         *  отработать ctrl + v
-         *  отработать Esc, Enter и другие если нужно
-         *  
-         */
-        console.log('SHOW');
-        let box = document.querySelector('.dev-tools-cmd');
+        let box = this.layer.getElement('.dev-tools-cmd');
         this.textInput = box.querySelector('.cmd-input-command-line');
         this.caretInput = box.querySelector('.cmd-input-caret');
+        this.cmdLayer = box.querySelector('.cmd-layer');
         this.text = new Input();
         this.text.on('change', 'cmd', [this.changeText, this]);
         this.text.on('move', 'pos', [this.moveCaret, this]);
@@ -107,8 +108,8 @@ class CommanderController {
         KeyController.on({
             code: KeyController.KEYS.ESC
         }, [this.escapeDown, this]);
-        let fade = box.querySelector('.fade-layer');
-        fade.addEventListener('click', ev => this.close());
+        this.fade = box.querySelector('.fade-layer');
+        this.fade.addEventListener('click', ev => this.close());
         //Для вставки ctrl+v
         KeyController.on({
             code: KeyController.KEYS.V,
@@ -120,11 +121,28 @@ class CommanderController {
         KeyController.on({
             code: KeyController.KEYS.ENTER
         }, [this.inputEnter, this]);
+        ToolController.setBox(box.querySelector('.cmd-search-list'));
+    }
+
+    static layerShow() {
+        console.log('SHOW');
+        this.layer.view();
+        setTimeout(() => {
+            this.fade.classList.add('show');
+            setTimeout(() => {
+                this.cmdLayer.classList.add('show');
+            }, 100);
+        }, 50);
     }
 
     static layerHide() {
         console.log('HIDE');
-        this.layer.hide();
+        ToolController.stopSearch();
+        this.cmdLayer.addEventListener("transitionend", () => {
+            this.layer.hide();
+        }, { once: true });
+        this.cmdLayer.classList.remove('show');
+        this.fade.classList.remove('show');
     }
 
     static layerDestroy() {
@@ -143,13 +161,14 @@ class CommanderController {
     }
 
     static changeText() {
-        this.textInput.innerText = this.text.get();
+        this.textInput.innerHTML = this.text.get() + '&lrm;';
         this.moveCaret();
         /**
          * TODO:
-         *      передвижение текста для каретки
-         *      если текст больше контейнера
+         *  При перемещении каретки в большом тексте
+         *  не реализовано перемещение текста влево и вправо
          */
+        ToolController.startSearch(this.text.get());
     }
 
     static moveCaret() {
@@ -183,6 +202,7 @@ class CommanderController {
 
     static input(ev) {
         if (!this.layer.isView()) return false;
+        ev.preventDefault();
         if (ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
             //Arrow right
             if (ev.keyCode==39) return this.text.moveForwardWord();
@@ -207,40 +227,48 @@ class CommanderController {
         //Arrow left
         if (ev.keyCode==37) return this.text.moveBackward();
         //Arrow up
-        //if (ev.keyCode==38) return this.text.set(HistoryController.getPrev()?.getCommand()).moveEnd();
+        if (ev.keyCode==38) return this.upDown();
         //Arrow down
-        //if (ev.keyCode==40) return this.text.set(HistoryController.getNext()?.getCommand()).moveEnd();
+        if (ev.keyCode==40) return this.downDown();
         //Symbols
-        let r = new RegExp('^[\\w\\s-а-яА-Я=]$', 'i');
+        let r = new RegExp('^[\\w\\s-а-яА-Я="]$', 'i');
         if (!r.test(ev.key)) return false;
-        this.addString(ev.key);
+        this.text.add(ev.key);
+    }
+
+    static upDown() {
+        if (ToolController.isView()) {
+            ToolController.moveSelect(true);
+        } else {
+            /**
+             * up into history list
+             */
+        }
+    }
+
+    static downDown() {
+        if (ToolController.isView()) {
+            ToolController.moveSelect();
+        } else {
+            
+        }
     }
 
     static addString(str) {
-        /**
-         * TODO:
-         *      предварительная проверка допустимых символов
-         */
+        str = str.replace(/[^\w\s-а-яА-Я="]/gi, '').replace(/[\s]+/g, ' ');
         this.text.add(str);
     }
 
     static inputEnter() {
-        /**
-         * Нихрена
-         * нужно сделать интер только тогда, когда выбран из выдающегося списка, иначе ничего не делать
-         * а список вылазет только после начала набора
-         */
-        if (this.enterBlock) return false;
-        this.enterBlock = true;
-        MessageController.commandExec(this.text.get())
+        ToolController.runSelected()
             .then(data => {
-                console.log(data);
-                /**
-                 * TODO:
-                 */
-                this.text.clear();
-                this.enterBlock = false;
+                ActionController.activation(data);
             });
+        this.text.clear();
+        /**
+         * TODO:
+         *  loading
+         */
     }
 
 }

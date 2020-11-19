@@ -5,7 +5,8 @@ class MessageController {
     static EVENTS = {
         HOT_KEYS: 'hotKeys',
         COMMANDER_LAYER: 'cmdLayer',
-        COMMAND_EXEC: 'cmdExec'
+        TOOL_SEARCH: 'toolSearch',
+        TOOL_EXEC: 'toolExec'
     };
 
     static connect() {
@@ -30,11 +31,20 @@ class MessageController {
         });
     }
 
-    static commandExec(command) {
+    static getListTools(search) {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
-                event: this.EVENTS.COMMAND_EXEC,
-                data: { command }
+                event: this.EVENTS.TOOL_SEARCH,
+                data: { search }
+            }, res => resolve(res));
+        });
+    }
+
+    static toolExec(id) {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                event: this.EVENTS.TOOL_EXEC,
+                data: { id }
             }, res => resolve(res));
         });
     }

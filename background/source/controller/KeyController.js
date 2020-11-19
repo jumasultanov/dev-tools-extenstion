@@ -18,6 +18,7 @@ class KeyController {
             if (index===false) newItems.push(item);
             else this.items.splice(index, 1, item);
         });
+        this.items = this.items.concat(newItems);
     }
 
     static getIndexByMethod(method) {

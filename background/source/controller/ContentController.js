@@ -1,5 +1,6 @@
 import ContentException from '../exception/ContentException.js';
 import KeyController from './KeyController.js';
+import ToolController from './ToolController.js';
 
 class ContentController {
 
@@ -13,7 +14,8 @@ class ContentController {
     static events = {
         hotKeys: [ContentController, 'getHotKeys'],
         cmdLayer: [ContentController, 'getCmdLayer'],
-        cmdExec: [ContentController, 'cmdExec']
+        toolSearch: [ContentController, 'toolSearch'],
+        toolExec: [ContentController, 'toolExec']
     }
 
     static connect() {
@@ -87,14 +89,22 @@ class ContentController {
         });
     }
 
-    static cmdExec(obj) {
+    static toolSearch(obj) {
+        console.log(obj.search);
+        return {
+            tools: ToolController.search(obj.search)
+        }
+    }
+
+    static toolExec(obj) {
         console.log(obj);
         /**
          * TODO:
          * 
          */
         return {
-            test: 'WOW!'
+            method: 'window',
+            args: ['http://dev-tools.local']
         }
     }
 
