@@ -15,7 +15,8 @@ class ContentController {
         hotKeys: [ContentController, 'getHotKeys'],
         cmdLayer: [ContentController, 'getCmdLayer'],
         toolSearch: [ContentController, 'toolSearch'],
-        toolExec: [ContentController, 'toolExec']
+        toolExec: [ContentController, 'toolExec'],
+        windowLayer: [ContentController, 'getWindowLayer']
     }
 
     static connect() {
@@ -104,8 +105,17 @@ class ContentController {
          */
         return {
             method: 'window',
-            args: ['http://dev-tools.local']
+            args: ['RegExp', 'http://dev-tools.local']
         }
+    }
+
+    static getWindowLayer() {
+        return new Promise((resolve, reject) => {
+            import('../template/Window.js')
+                .then(module => module.layer)
+                .then(layer => resolve({layer}))
+                .catch(err => reject(err));
+        });
     }
 
 }

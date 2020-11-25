@@ -24,7 +24,7 @@
     transition: opacity .1s ease-in;
 }
 
-.dev-tools-cmd .fade-layer.show {
+.dev-tools-cmd .fade-layer.layer-show {
     opacity: 1;
 }
 
@@ -44,7 +44,7 @@
     transition: transform .2s ease-in-out;
 }
 
-.dev-tools-cmd .cmd-layer.show {
+.dev-tools-cmd .cmd-layer.layer-show {
     transform: translateY(0%);
 }
 

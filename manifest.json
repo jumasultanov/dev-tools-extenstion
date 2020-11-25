@@ -32,6 +32,8 @@
             "page/source/model/Layer.js",
             "page/source/model/Input.js",
             "page/source/model/Tool.js",
+            "page/source/model/TrayElement.js",
+            "page/source/model/WindowElement.js",
             "page/source/exception/Exception.js",
             "page/source/exception/MessageException.js",
             "page/source/exception/ActionException.js",

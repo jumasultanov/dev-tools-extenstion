@@ -125,24 +125,22 @@ class CommanderController {
     }
 
     static layerShow() {
-        console.log('SHOW');
         this.layer.view();
         setTimeout(() => {
-            this.fade.classList.add('show');
+            this.fade.classList.add('layer-show');
             setTimeout(() => {
-                this.cmdLayer.classList.add('show');
+                this.cmdLayer.classList.add('layer-show');
             }, 100);
         }, 50);
     }
 
     static layerHide() {
-        console.log('HIDE');
         ToolController.stopSearch();
         this.cmdLayer.addEventListener("transitionend", () => {
             this.layer.hide();
         }, { once: true });
-        this.cmdLayer.classList.remove('show');
-        this.fade.classList.remove('show');
+        this.cmdLayer.classList.remove('layer-show');
+        this.fade.classList.remove('layer-show');
     }
 
     static layerDestroy() {
@@ -250,7 +248,9 @@ class CommanderController {
         if (ToolController.isView()) {
             ToolController.moveSelect();
         } else {
-            
+            /**
+             * down into history list
+             */
         }
     }
 
@@ -260,15 +260,20 @@ class CommanderController {
     }
 
     static inputEnter() {
-        ToolController.runSelected()
-            .then(data => {
-                ActionController.activation(data);
-            });
-        this.text.clear();
         /**
          * TODO:
          *  loading
          */
+        ToolController.runSelected()
+            .then(data => {
+                this.close();
+                /**
+                 * TODO:
+                 *  add story
+                 */
+                ActionController.activation(data);
+            });
+        this.text.clear();
     }
 
 }

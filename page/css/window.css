@@ -1,0 +1,271 @@
+.dev-tools-windows {
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    color: #e7e7e7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    z-index: 2147483647;
+}
+
+.dev-tools-windows .background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(51,51,51,.9);
+    opacity: 0;
+    transition: opacity .1s ease-in;
+}
+
+.dev-tools-windows .background-layer.layer-show {
+    opacity: 1;
+}
+
+.dev-tools-windows .windows-control-layer {
+    position: relative;
+    display: flex;
+    width: 100%;
+    background-color: #1e1e1e;
+    justify-content: space-between;
+    transform: translateY(-100%);
+    transition: transform .2s ease-in-out;
+}
+
+.dev-tools-windows .windows-control-layer.layer-show {
+    transform: translateY(0%);
+}
+
+.dev-tools-windows .control-left-layer,
+.dev-tools-windows .control-right-layer {
+    display: flex;
+}
+
+.dev-tools-windows .control-element {
+    width: 40px;
+    height: 40px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 45%;
+    cursor: pointer;
+}
+
+.dev-tools-windows .control-element.activated,
+.dev-tools-windows .control-element:hover {
+    background-color: #333;
+}
+
+.dev-tools-windows .control-close {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;" xml:space="preserve"><path fill="rgb(231,231,231)" d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285L284.286,256.002z"/></svg>');
+}
+
+.dev-tools-windows .control-close:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;" xml:space="preserve"><path fill="rgb(255,102,102)" d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285L284.286,256.002z"/></svg>');
+}
+
+.dev-tools-windows .control-user {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g fill="rgb(231,231,231)"><path d="M256,288.389c-153.837,0-238.56,72.776-238.56,204.925c0,10.321,8.365,18.686,18.686,18.686h439.747c10.321,0,18.686-8.365,18.686-18.686C494.56,361.172,409.837,288.389,256,288.389z M55.492,474.628c7.35-98.806,74.713-148.866,200.508-148.866s193.159,50.06,200.515,148.866H55.492z"/><path d="M256,0c-70.665,0-123.951,54.358-123.951,126.437c0,74.19,55.604,134.54,123.951,134.54s123.951-60.35,123.951-134.534C379.951,54.358,326.665,0,256,0z M256,223.611c-47.743,0-86.579-43.589-86.579-97.168c0-51.611,36.413-89.071,86.579-89.071c49.363,0,86.579,38.288,86.579,89.071C342.579,180.022,303.743,223.611,256,223.611z"/></g></svg>');
+}
+
+.dev-tools-windows .control-user:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g fill="rgb(255,255,0)"><path d="M256,288.389c-153.837,0-238.56,72.776-238.56,204.925c0,10.321,8.365,18.686,18.686,18.686h439.747c10.321,0,18.686-8.365,18.686-18.686C494.56,361.172,409.837,288.389,256,288.389z M55.492,474.628c7.35-98.806,74.713-148.866,200.508-148.866s193.159,50.06,200.515,148.866H55.492z"/><path d="M256,0c-70.665,0-123.951,54.358-123.951,126.437c0,74.19,55.604,134.54,123.951,134.54s123.951-60.35,123.951-134.534C379.951,54.358,326.665,0,256,0z M256,223.611c-47.743,0-86.579-43.589-86.579-97.168c0-51.611,36.413-89.071,86.579-89.071c49.363,0,86.579,38.288,86.579,89.071C342.579,180.022,303.743,223.611,256,223.611z"/></g></svg>');
+}
+
+.dev-tools-windows .control-setting {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g fill="rgb(231,231,231)"><path d="M256,176c-44.113,0-80,35.888-80,80s35.888,80,80,80s80-35.888,80-80S300.113,176,256,176z M256,296c-22.056,0-40-17.944-40-40c0-22.056,17.944-40,40-40c22.056,0,40,17.944,40,40C296,278.056,278.056,296,256,296z"/><path d="M502.164,315.637l-51.788-39.683c1.456-13.725,1.367-27.02,0-39.907l51.788-39.683c8.029-6.152,10.201-17.33,5.059-26.041l-50.152-84.978c-4.996-8.466-15.405-12.046-24.553-8.443l-61.445,24.2c-11.222-8.031-23.233-14.836-35.904-20.341l-9.224-63.63C324.519,7.296,316.089,0,306.152,0H205.848c-9.937,0-18.367,7.296-19.792,17.132l-9.224,63.63c-12.671,5.506-24.682,12.31-35.904,20.341l-61.445-24.2c-9.15-3.604-19.557-0.023-24.553,8.443L4.777,170.323c-5.141,8.711-2.969,19.889,5.059,26.041l51.789,39.682c-1.456,13.725-1.367,27.02,0,39.907L9.837,315.636c-8.029,6.152-10.201,17.33-5.059,26.041l50.151,84.978c4.996,8.466,15.404,12.046,24.553,8.443l61.446-24.199c11.22,8.029,23.232,14.835,35.903,20.34l9.224,63.63c1.426,9.835,9.856,17.131,19.793,17.131h100.304c9.937,0,18.367-7.296,19.793-17.13l9.224-63.63c12.671-5.505,24.683-12.31,35.903-20.34l61.446,24.199c9.149,3.603,19.557,0.022,24.553-8.443l50.152-84.978C512.364,332.967,510.192,321.789,502.164,315.637z M431.297,391.626l-56.047-22.073c-6.716-2.643-14.328-1.467-19.93,3.077c-13.523,10.973-28.702,19.557-45.114,25.515c-6.928,2.515-11.91,8.636-12.968,15.93L288.842,472h-65.685l-8.395-57.925c-1.058-7.294-6.04-13.415-12.968-15.93c-16.412-5.959-31.591-14.543-45.114-25.515c-5.602-4.544-13.218-5.72-19.93-3.077l-56.047,22.073l-32.471-55.019l46.96-35.984c5.902-4.523,8.809-11.946,7.545-19.274c-2.944-17.075-2.847-34.187,0-50.699c1.264-7.328-1.643-14.752-7.545-19.274l-46.96-35.984l32.471-55.019l56.047,22.073c6.715,2.645,14.328,1.467,19.93-3.077c13.524-10.972,28.703-19.556,45.114-25.514c6.928-2.515,11.91-8.636,12.968-15.93L223.158,40h65.685l8.395,57.925c1.058,7.294,6.04,13.415,12.968,15.93c16.411,5.958,31.59,14.542,45.114,25.514c5.602,4.545,13.217,5.721,19.93,3.077l56.047-22.073l32.47,55.019l-46.96,35.984c-5.902,4.523-8.809,11.946-7.545,19.274c2.944,17.075,2.847,34.187,0,50.699c-1.264,7.328,1.643,14.752,7.545,19.274l46.96,35.984L431.297,391.626z"/></g></svg>');
+}
+
+.dev-tools-windows .control-setting:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g fill="rgb(255,255,0)"><path d="M256,176c-44.113,0-80,35.888-80,80s35.888,80,80,80s80-35.888,80-80S300.113,176,256,176z M256,296c-22.056,0-40-17.944-40-40c0-22.056,17.944-40,40-40c22.056,0,40,17.944,40,40C296,278.056,278.056,296,256,296z"/><path d="M502.164,315.637l-51.788-39.683c1.456-13.725,1.367-27.02,0-39.907l51.788-39.683c8.029-6.152,10.201-17.33,5.059-26.041l-50.152-84.978c-4.996-8.466-15.405-12.046-24.553-8.443l-61.445,24.2c-11.222-8.031-23.233-14.836-35.904-20.341l-9.224-63.63C324.519,7.296,316.089,0,306.152,0H205.848c-9.937,0-18.367,7.296-19.792,17.132l-9.224,63.63c-12.671,5.506-24.682,12.31-35.904,20.341l-61.445-24.2c-9.15-3.604-19.557-0.023-24.553,8.443L4.777,170.323c-5.141,8.711-2.969,19.889,5.059,26.041l51.789,39.682c-1.456,13.725-1.367,27.02,0,39.907L9.837,315.636c-8.029,6.152-10.201,17.33-5.059,26.041l50.151,84.978c4.996,8.466,15.404,12.046,24.553,8.443l61.446-24.199c11.22,8.029,23.232,14.835,35.903,20.34l9.224,63.63c1.426,9.835,9.856,17.131,19.793,17.131h100.304c9.937,0,18.367-7.296,19.793-17.13l9.224-63.63c12.671-5.505,24.683-12.31,35.903-20.34l61.446,24.199c9.149,3.603,19.557,0.022,24.553-8.443l50.152-84.978C512.364,332.967,510.192,321.789,502.164,315.637z M431.297,391.626l-56.047-22.073c-6.716-2.643-14.328-1.467-19.93,3.077c-13.523,10.973-28.702,19.557-45.114,25.515c-6.928,2.515-11.91,8.636-12.968,15.93L288.842,472h-65.685l-8.395-57.925c-1.058-7.294-6.04-13.415-12.968-15.93c-16.412-5.959-31.591-14.543-45.114-25.515c-5.602-4.544-13.218-5.72-19.93-3.077l-56.047,22.073l-32.471-55.019l46.96-35.984c5.902-4.523,8.809-11.946,7.545-19.274c-2.944-17.075-2.847-34.187,0-50.699c1.264-7.328-1.643-14.752-7.545-19.274l-46.96-35.984l32.471-55.019l56.047,22.073c6.715,2.645,14.328,1.467,19.93-3.077c13.524-10.972,28.703-19.556,45.114-25.514c6.928-2.515,11.91-8.636,12.968-15.93L223.158,40h65.685l8.395,57.925c1.058,7.294,6.04,13.415,12.968,15.93c16.411,5.958,31.59,14.542,45.114,25.514c5.602,4.545,13.217,5.721,19.93,3.077l56.047-22.073l32.47,55.019l-46.96,35.984c-5.902,4.523-8.809,11.946-7.545,19.274c2.944,17.075,2.847,34.187,0,50.699c-1.264,7.328,1.643,14.752,7.545,19.274l46.96,35.984L431.297,391.626z"/></g></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="1"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect stroke="rgb(231,231,231)" fill="transparent" width="92" height="92" x="4" y="4" stroke-width="8" rx="5" ry="5" /></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="1"]:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect stroke="rgb(255,255,0)" fill="transparent" width="92" height="92" x="4" y="4" stroke-width="8" rx="5" ry="5" /></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="2"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="rgb(231,231,231)" fill="transparent" stroke-width="8"><rect width="38" height="92" x="4" y="4" rx="5" ry="5" /><rect width="38" height="92" x="58" y="4" rx="5" ry="5" /></g></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="2"]:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="rgb(255,255,0)" fill="transparent" stroke-width="8"><rect width="38" height="92" x="4" y="4" rx="5" ry="5" /><rect width="38" height="92" x="58" y="4" rx="5" ry="5" /></g></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="4"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="rgb(231,231,231)" fill="transparent" stroke-width="8"><rect width="38" height="38" x="4" y="4" rx="5" ry="5" /><rect width="38" height="38" x="58" y="4" rx="5" ry="5" /><rect width="38" height="38" x="4" y="58" rx="5" ry="5" /><rect width="38" height="38" x="58" y="58" rx="5" ry="5" /></g></svg>');
+}
+
+.dev-tools-windows .control-view-option[dataView="4"]:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="rgb(255,255,0)" fill="transparent" stroke-width="8"><rect width="38" height="38" x="4" y="4" rx="5" ry="5" /><rect width="38" height="38" x="58" y="4" rx="5" ry="5" /><rect width="38" height="38" x="4" y="58" rx="5" ry="5" /><rect width="38" height="38" x="58" y="58" rx="5" ry="5" /></g></svg>');
+}
+
+.dev-tools-windows .control-expand {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect stroke="rgb(231,231,231)" fill="transparent" width="92" height="92" x="4" y="4" stroke-width="8" rx="5" ry="5" /></svg>');
+}
+
+.dev-tools-windows .control-expand:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect stroke="rgb(255,255,0)" fill="transparent" width="92" height="92" x="4" y="4" stroke-width="8" rx="5" ry="5" /></svg>');
+}
+
+.dev-tools-windows .control-hide {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line stroke="rgb(231,231,231)" stroke-width="8" x1="4" x2="96" y1="96" y2="96" stroke-linecap="round" /></svg>');
+}
+
+.dev-tools-windows .control-hide:hover {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line stroke="rgb(255,255,0)" stroke-width="8" x1="4" x2="96" y1="96" y2="96" stroke-linecap="round" /></svg>');
+}
+
+.dev-tools-windows .windows-container-layer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.dev-tools-windows .windows-tray-layer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    transform: translateX(100%);
+    transition: transform .2s ease-in-out;
+}
+
+.dev-tools-windows .windows-tray-layer.layer-show {
+    transform: translateY(0%);
+}
+
+.dev-tools-windows .windows-view-container {
+    height: 100%;
+    flex-grow: 1;
+}
+
+.dev-tools-windows .window-element {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    background: #333;
+    overflow: hidden;
+    user-select: none;
+    transform-origin: top right;
+    transition: transform .2s, opacity .2s .1s;
+}
+
+.dev-tools-windows .window-element.window-element-hidden {
+    pointer-events: none;
+    transform: scale(0, 0) translateX(200px);
+    opacity: 0;
+    transition: transform .5s, opacity .2s;
+}
+
+.dev-tools-windows .window-element-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e1e1e;
+}
+
+.dev-tools-windows .window-element-view-control {
+    display: inline-flex;
+    justify-content: flex-end;
+}
+
+.dev-tools-windows .window-element-view-control .control-element {
+    width: 28px;
+    height: 28px;
+    background-size: 38%;
+}
+
+.dev-tools-windows .window-element-title {
+    display: flex;
+    flex-grow: 1;
+    line-height: 28px;
+    padding-left: 10px;
+    font-size: 0.9em;
+    cursor: default;
+}
+
+.dev-tools-windows .window-element-frame {
+    display: block;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: calc(100% - 28px);
+    transition: opacity .4s ease-in-out;
+}
+
+.dev-tools-windows .window-frame-loading .window-element-frame {
+    opacity: 0;
+}
+
+.dev-tools-windows .window-element.resize-mode .window-element-frame,
+.dev-tools-windows .window-element.move-mode .window-element-frame {
+    pointer-events: none;
+}
+
+.dev-tools-windows .window-frame-loading:after {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 28px);
+    background-image: url('data:image/svg+xml;utf8,<svg class="lds-message" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><g transform="translate(20 50)"><circle cx="0" cy="0" r="6" fill="rgb(54,142,190)" transform="scale(0.214876 0.214876)"><animateTransform attributeName="transform" type="scale" begin="-0.3375s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="0.9s" repeatCount="indefinite"></animateTransform></circle></g><g transform="translate(40 50)"><circle cx="0" cy="0" r="6" fill="rgb(100,178,139)" transform="scale(0.560879 0.560879)"><animateTransform attributeName="transform" type="scale" begin="-0.225s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="0.9s" repeatCount="indefinite"></animateTransform></circle></g><g transform="translate(60 50)"><circle cx="0" cy="0" r="6" fill="rgb(255,138,0)" transform="scale(0.877172 0.877172)"><animateTransform attributeName="transform" type="scale" begin="-0.1125s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="0.9s" repeatCount="indefinite"></animateTransform></circle></g><g transform="translate(80 50)"><circle cx="0" cy="0" r="6" fill="rgb(255,80,79)" transform="scale(0.995171 0.995171)"><animateTransform attributeName="transform" type="scale" begin="0s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="0.9s" repeatCount="indefinite"></animateTransform></circle></g></svg>');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 150px;
+}
+
+.dev-tools-windows .window-frame-loading .window-element-resize {
+    opacity: 0;
+}
+
+.dev-tools-windows .window-element-resize {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    transform: rotate(-45deg);
+    margin-bottom: -20px;
+    margin-right: -20px;
+    background-color: transparent;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="rgb(51,51,51)" stroke-width="6"><line x1="12" x2="88" y1="12" y2="12" stroke-linecap="round" /><line x1="30" x2="70" y1="28" y2="28" stroke-linecap="round" /><line x1="44" x2="56" y1="42" y2="42" stroke-linecap="round" /></g></svg>');
+    background-position: 50% 15%;
+    background-repeat: no-repeat;
+    background-size: 50%;
+    cursor: se-resize;
+    transition: opacity .4s .4s ease-in-out;
+}
+
+.dev-tools-windows .windows-tray-element {
+    border-radius: 4px;
+    width: 100%;
+    height: 30px;
+    background-color: #333;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.dev-tools-windows .windows-tray-element:last-child {
+    margin-bottom: 0;
+}
+
+.dev-tools-windows .windows-tray-element.tray-element-active {
+    background-color: #1e1e1e;
+}

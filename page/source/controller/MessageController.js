@@ -6,7 +6,8 @@ class MessageController {
         HOT_KEYS: 'hotKeys',
         COMMANDER_LAYER: 'cmdLayer',
         TOOL_SEARCH: 'toolSearch',
-        TOOL_EXEC: 'toolExec'
+        TOOL_EXEC: 'toolExec',
+        WINDOW_LAYER: 'windowLayer'
     };
 
     static connect() {
@@ -19,7 +20,7 @@ class MessageController {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
                 event: this.EVENTS.HOT_KEYS
-            }, res => resolve(res));
+            }, resolve);
         });
     }
 
@@ -27,7 +28,7 @@ class MessageController {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
                 event: this.EVENTS.COMMANDER_LAYER
-            }, res => resolve(res));
+            }, resolve);
         });
     }
 
@@ -36,7 +37,7 @@ class MessageController {
             chrome.runtime.sendMessage({
                 event: this.EVENTS.TOOL_SEARCH,
                 data: { search }
-            }, res => resolve(res));
+            }, resolve);
         });
     }
 
@@ -45,7 +46,15 @@ class MessageController {
             chrome.runtime.sendMessage({
                 event: this.EVENTS.TOOL_EXEC,
                 data: { id }
-            }, res => resolve(res));
+            }, resolve);
+        });
+    }
+
+    static getWindowLayer() {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                event: this.EVENTS.WINDOW_LAYER
+            }, resolve);
         });
     }
 
