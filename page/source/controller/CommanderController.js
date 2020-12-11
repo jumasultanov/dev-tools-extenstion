@@ -63,10 +63,6 @@ class CommanderController {
                 this.inited = true;
             }
         });
-        /**
-         * TODO:
-         *      Add story
-         */
     }
 
     static addStyles() {
@@ -103,6 +99,7 @@ class CommanderController {
         this.cmdLayer = box.querySelector('.cmd-layer');
         this.text = new Input();
         this.text.on('change', 'cmd', [this.changeText, this]);
+        this.text.on('changeKB', 'cmd', [this.changeTextKeyBoard, this]);
         this.text.on('move', 'pos', [this.moveCaret, this]);
         //Для выхода из консоли
         KeyController.on({
@@ -122,6 +119,7 @@ class CommanderController {
             code: KeyController.KEYS.ENTER
         }, [this.inputEnter, this]);
         ToolController.setBox(box.querySelector('.cmd-search-list'));
+        StoryController.setBox(box.querySelector('.cmd-story-user'), box.querySelector('.cmd-story'));
     }
 
     static layerShow() {
@@ -130,6 +128,7 @@ class CommanderController {
             this.fade.classList.add('layer-show');
             setTimeout(() => {
                 this.cmdLayer.classList.add('layer-show');
+                this.storyLoad();
             }, 100);
         }, 50);
     }
@@ -169,6 +168,11 @@ class CommanderController {
         ToolController.startSearch(this.text.get());
     }
 
+    static changeTextKeyBoard() {
+        //Отключаем переход по истории
+        StoryController.started(true);
+    }
+
     static moveCaret() {
         this.caretInput.style.transform = 'translateX(-'+(this.text.getPosFromRight()*100)+'%)';
         this.caretInput.classList.add('no-flashing');
@@ -200,58 +204,71 @@ class CommanderController {
 
     static input(ev) {
         if (!this.layer.isView()) return false;
+        /**
+         * TODO:
+         *      часть клавиш убрать из списка
+         *      например F5, потому что preventDefault отменяет дальнейшее событие
+         */
         ev.preventDefault();
+        //Если зажали ctrl
         if (ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
-            //Arrow right
+            //Arrow right - Перемещение вправо через слово
             if (ev.keyCode==39) return this.text.moveForwardWord();
-            //Arrow left
+            //Arrow left - Перемещение влево через слово
             if (ev.keyCode==37) return this.text.moveBackwardWord();
-            //BackSpace
+            //BackSpace - Удаление до пробела слева
             if (ev.keyCode==8) return this.text.deleteLeftWord();
-            //Delete
+            //Delete - Удаление до пробела справа
             if (ev.keyCode==46) return this.text.deleteRightWord();
         }
+        //Если зажали ctrl или alt
         if (ev.ctrlKey || ev.altKey) return false;
-        //BackSpace
+        //BackSpace - Удаление символа слева
         if (ev.keyCode==8) return this.text.deleteLeft();
-        //Delete
+        //Delete - Удаление символа справа
         if (ev.keyCode==46) return this.text.deleteRight();
-        //Home
+        //Home - Перемещение в начало строки
         if (ev.keyCode==36) return this.text.moveStart();
-        //End
+        //End - Перемещение в конец строки
         if (ev.keyCode==35) return this.text.moveEnd();
-        //Arrow right
+        //Arrow right - Перемещение на символ вправо
         if (ev.keyCode==39) return this.text.moveForward();
-        //Arrow left
+        //Arrow left - Перемещение на символ влево
         if (ev.keyCode==37) return this.text.moveBackward();
-        //Arrow up
+        //Arrow up - Переход по списку вверх
         if (ev.keyCode==38) return this.upDown();
-        //Arrow down
+        //Arrow down - Переход по списку вниз
         if (ev.keyCode==40) return this.downDown();
         //Symbols
         let r = new RegExp('^[\\w\\s-а-яА-Я="]$', 'i');
+        //Все не подходяшие символы не вводятся
         if (!r.test(ev.key)) return false;
         this.text.add(ev.key);
+        StoryController.reset();
     }
 
     static upDown() {
-        if (ToolController.isView()) {
+        if (ToolController.isView() && !StoryController.isStarted()) {
             ToolController.moveSelect(true);
         } else {
-            /**
-             * up into history list
-             */
+            this.text.clear();
+            this.text.add(StoryController.moveSelect(true));
+            StoryController.started();
         }
     }
 
     static downDown() {
-        if (ToolController.isView()) {
+        if (ToolController.isView() && !StoryController.isStarted()) {
             ToolController.moveSelect();
         } else {
-            /**
-             * down into history list
-             */
+            this.text.clear();
+            this.text.add(StoryController.moveSelect());
+            StoryController.started();
         }
+    }
+
+    static storyLoad() {
+        StoryController.load();
     }
 
     static addString(str) {
@@ -264,15 +281,14 @@ class CommanderController {
          * TODO:
          *  loading
          */
+        let tool = ToolController.getSelected();
         ToolController.runSelected()
             .then(data => {
                 this.close();
-                /**
-                 * TODO:
-                 *  add story
-                 */
+                StoryController.add(tool);
                 ActionController.activation(data);
-            });
+            })
+            .catch(() => {});
         this.text.clear();
     }
 

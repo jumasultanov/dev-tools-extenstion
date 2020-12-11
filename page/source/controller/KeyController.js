@@ -73,7 +73,6 @@ class KeyController {
         let disabledBrowserKey = false;
         evs.forEach(event => {
             if (!this.matchSpecKey(event.key, shift, ctrl, alt)) return false;
-            console.log('TRIGGER', event.method);
             ActionController.apply(event.method);
             if (event.key.disabledBrowserKey) disabledBrowserKey = true;
         });

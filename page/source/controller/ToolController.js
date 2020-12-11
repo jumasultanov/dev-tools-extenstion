@@ -42,12 +42,13 @@ class ToolController {
 
     static autoSelect() {
         if (!this.layer) return false;
+        this.selectIndex = 0;
         this.moveSelect(0);
     }
 
     static unSelect() {
         let item = this.layer.items[this.selectIndex];
-        item.block.get().classList.remove('selected');
+        item?.block.get().classList.remove('selected');
     }
 
     static moveSelect(up = false) {
@@ -68,10 +69,15 @@ class ToolController {
         item.block.get().classList.add('selected');
     }
 
+    static getSelected() {
+        return this.items[this.selectIndex] || null;
+    }
+
     static runSelected() {
         return new Promise((resolve, reject) => {
             if (this.isView()) {
-                let item = this.items[this.selectIndex];
+                let item = this.getSelected();
+                this.selectIndex = 0;
                 MessageController.toolExec(item.getID())
                     .then(resolve)
                     .catch(reject);

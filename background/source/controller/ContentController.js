@@ -1,6 +1,8 @@
 import ContentException from '../exception/ContentException.js';
 import KeyController from './KeyController.js';
+import ServiceController from './ServiceController.js';
 import ToolController from './ToolController.js';
+import StoryController from './StoryController.js';
 
 class ContentController {
 
@@ -16,7 +18,8 @@ class ContentController {
         cmdLayer: [ContentController, 'getCmdLayer'],
         toolSearch: [ContentController, 'toolSearch'],
         toolExec: [ContentController, 'toolExec'],
-        windowLayer: [ContentController, 'getWindowLayer']
+        windowLayer: [ContentController, 'getWindowLayer'],
+        storyList: [ContentController, 'getStoryList']
     }
 
     static connect() {
@@ -59,6 +62,7 @@ class ContentController {
                     return false;
                 }
             } catch (e) {
+                console.error(e);
                 let err = this.createMethodException(event, item);
                 result.error = err.get();
             }
@@ -76,9 +80,27 @@ class ContentController {
     }
 
     static getHotKeys() {
-        return {
-            keys: KeyController.items || null
-        }
+        return new Promise((resolve, reject) => {
+            if (ServiceController.isConnected()) {
+                resolve({
+                    serverSuccess: true,
+                    keys: KeyController.items || null
+                });
+            } else {
+                ServiceController.connect()
+                    .then(() => {
+                        resolve({
+                            serverSuccess: true,
+                            keys: KeyController.items || null
+                        })
+                    })
+                    .catch(() => {
+                        resolve({
+                            serverSuccess: false
+                        });
+                    });
+            }
+        })
     }
 
     static getCmdLayer() {
@@ -91,21 +113,25 @@ class ContentController {
     }
 
     static toolSearch(obj) {
-        console.log(obj.search);
-        return {
-            tools: ToolController.search(obj.search)
+        let search = obj.search;
+        let tools = [];
+        if (search && search.length > 1) {
+            search = search.replace(/[\s]+/g, ' ').trim();
+            tools = ToolController.search(search);
         }
+        return { tools }
     }
 
     static toolExec(obj) {
-        console.log(obj);
-        /**
-         * TODO:
-         * 
-         */
+        let tool = ToolController.getByID(obj.id);
+        let args = null;
+        if (tool) {
+            args = tool.getExecArgs();
+            StoryController.add(tool);
+        }
         return {
             method: 'window',
-            args: ['RegExp', 'http://dev-tools.local']
+            args
         }
     }
 
@@ -116,6 +142,12 @@ class ContentController {
                 .then(layer => resolve({layer}))
                 .catch(err => reject(err));
         });
+    }
+
+    static getStoryList() {
+        return {
+            story: StoryController.getAll()
+        }
     }
 
 }

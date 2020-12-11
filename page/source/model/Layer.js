@@ -23,6 +23,21 @@ class Layer {
         return this;
     }
 
+    append(elements) {
+        let length = this.items.length;
+        this.createTree(elements, this.items);
+        if (this.isView()) {
+            this.items.forEach((item, index) => {
+                if (length > index) return;
+                this.parent.appendChild(item.block.get());
+            });
+        }
+        elements.forEach(element => {
+            this.elements.push(element);
+        });
+        return this;
+    }
+
     createTree(elements, items, parent = null) {
         elements.forEach(element => {
             let block = new Block(element.type, element.name||element.text, element.attrs);
@@ -68,6 +83,11 @@ class Layer {
         let matches = this.getElements(selector, true);
         if (!matches?.length) return null;
         return matches[0];
+    }
+
+    getLastElement() {
+        if (!this.items.length) return null;
+        return this.items[this.items.length - 1].block.get();
     }
 
     isView() {

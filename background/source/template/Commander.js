@@ -61,6 +61,11 @@ export let layer = [
                                 type: 'element',
                                 name: 'div',
                                 attrs: { class: 'cmd-story-line' }
+                            },
+                            {
+                                type: 'element',
+                                name: 'div',
+                                attrs: { class: 'cmd-story-user' }
                             }
                         ]
                     },

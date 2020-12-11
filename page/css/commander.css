@@ -49,7 +49,7 @@
 }
 
 .dev-tools-cmd .cmd-story {
-    max-height: 300px;
+    max-height: 150px;
     overflow-y: scroll;
 }
 
@@ -161,5 +161,33 @@
     top: 10px;
     left: 10px;
     font-weight: 600;
+    color: #f5f543;
+}
+
+.dev-tools-cmd .cmd-search-item-found {
+    font-weight: 600;
+    color: #f5f543;
+}
+
+.dev-tools-cmd .cmd-search-item-category {
+    display: flex;
+    margin-top: 7px;
+    overflow: hidden;
+}
+
+.dev-tools-cmd .cmd-category-tag {
+    margin-right: 7px;
+    background: #4f4f4f;
+    font-size: 0.85em;
+    padding: 2px 7px 4px 7px;
+    border-radius: 3px;
+    text-transform: lowercase;
+}
+
+.dev-tools-cmd .cmd-story-user .cmd-story-line {
+    display: flex;
+}
+
+.dev-tools-cmd .cmd-story-line-name {
     color: #f5f543;
 }

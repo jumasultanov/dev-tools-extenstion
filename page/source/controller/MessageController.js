@@ -7,7 +7,8 @@ class MessageController {
         COMMANDER_LAYER: 'cmdLayer',
         TOOL_SEARCH: 'toolSearch',
         TOOL_EXEC: 'toolExec',
-        WINDOW_LAYER: 'windowLayer'
+        WINDOW_LAYER: 'windowLayer',
+        STORY_LIST: 'storyList'
     };
 
     static connect() {
@@ -54,6 +55,14 @@ class MessageController {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
                 event: this.EVENTS.WINDOW_LAYER
+            }, resolve);
+        });
+    }
+
+    static getStory() {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                event: this.EVENTS.STORY_LIST
             }, resolve);
         });
     }

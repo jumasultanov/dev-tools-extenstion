@@ -7,6 +7,7 @@ class WindowElement {
     listEvents = {};
     btn = {};
     minimized = false;
+    focused = false;
 
     minWidth = 400;
     minHeight = 400;
@@ -14,6 +15,14 @@ class WindowElement {
     constructor(title, src) {
         this.title = title;
         this.src = src;
+    }
+
+    getTitle() {
+        return this.title;
+    }
+
+    getSource() {
+        return this.src;
     }
 
     setXY(x, y) {
@@ -62,7 +71,7 @@ class WindowElement {
         this.el.classList.add('window-frame-loading');
         this.iframe.onload = () => {
             this.el.classList.remove('window-frame-loading');
-            this.iframe.contentDocument.addEventListener('mousedown', ev => this.focus());
+            this.iframe.contentDocument?.addEventListener('mousedown', ev => this.focus());
         }
         this.btn.minimize = this.el.querySelector('.control-hide');
         this.btn.expand = this.el.querySelector('.control-expand');
@@ -88,6 +97,10 @@ class WindowElement {
         return this.layer.isView();
     }
 
+    isFocus() {
+        return this.focused;
+    }
+
     show() {
         if (!this.layer) this.create();
         this.trayCreate();
@@ -99,6 +112,7 @@ class WindowElement {
     showFromMinimize() {
         this.el.classList.remove('window-element-hidden');
         this.minimized = false;
+        return this;
     }
 
     isMinimize() {
@@ -158,12 +172,14 @@ class WindowElement {
         ];
         this.activeResize = [ev.pageX, ev.pageY, this.width, this.height, mw, mh];
         this.el.classList.add('resize-mode');
+        WindowElement.box.classList.add('block-mode');
         this.focus();
     }
 
     resizeStop(ev) {
         this.activeResize = null;
         this.el.classList.remove('resize-mode');
+        WindowElement.box.classList.remove('block-mode');
     }
 
     resizeMove(ev) {
@@ -193,12 +209,14 @@ class WindowElement {
         ];
         this.activeMove = [ev.pageX, ev.pageY, this.x, this.y, minDX, minDY, maxDX, maxDY];
         this.el.classList.add('move-mode');
+        WindowElement.box.classList.add('block-mode');
         this.focus();
     }
 
     moveStop(ev) {
         this.activeMove = null;
         this.el.classList.remove('move-mode');
+        WindowElement.box.classList.remove('block-mode');
     }
 
     move(ev) {
@@ -217,11 +235,13 @@ class WindowElement {
         this.el.style.zIndex = 1;
         this.tray.activate();
         this.trigger('focus');
+        this.focused = true;
     }
 
     blur() {
         this.el.style.zIndex = null;
         this.tray.deactivate();
+        this.focused = false;
     }
 
     trayCreate() {

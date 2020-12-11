@@ -4,8 +4,8 @@ class WindowController {
     static inited = false;
     static items = [];
     static selectedIndex = 0;
-    static currentPosition = 1;
-    static offsetPosition = 30;
+    static currentPosition = -1;
+    static offsetPosition = 20;
     static reservePositions = [];
 
     static styles = [
@@ -40,7 +40,6 @@ class WindowController {
         this.viewPos = box.querySelectorAll('.windows-control-layer .control-view-option');
         this.viewPos?.forEach(el => {
             let dataView = +el.getAttribute('dataView');
-            if (dataView == this.currentPosition) el.classList.add('activated');
             el.addEventListener('click', ev => {
                 this.updatePositions(dataView);
             });
@@ -130,18 +129,57 @@ class WindowController {
     }
 
     static updatePositions(fill) {
-        /**
-         * TODO:
-         */
-        console.log(fill);
+        this.currentPosition = fill;
+        if (!this.items.length) return;
+        let selected = this.getPositionsItems();
+        selected?.forEach((index, key) => {
+            let [x, y, w, h] = this.getOrientation(fill, key);
+            this.items[index].setXY(x, y).setDimension(w, h).showFromMinimize();
+        });
+        this.items.forEach((item, key) => {
+            if (selected.indexOf(key) < 0 && item.isView()) {
+                item.minimize();
+            }
+        });
+        this.viewPos?.forEach(el => {
+            let dataView = +el.getAttribute('dataView');
+            if (dataView == fill) el.classList.add('activated');
+            else el.classList.remove('activated');
+        })
     }
 
-    static getOrientation(pos) {
+    static getPositionsItems() {
+        if (this.selectedIndex < 0) return null;
+        if (!this.items.length) return null;
+        let selected = [];
+        let checkIndex = this.selectedIndex;
+        let back = false;
+        while (selected.length < this.currentPosition) {
+            if (checkIndex in this.items) {
+                let item = this.items[checkIndex];
+                if (item.isView()) {
+                    selected.push(checkIndex);
+                }
+            }
+            if (checkIndex >= this.items.length - 1) {
+                back = true;
+                checkIndex = this.selectedIndex;
+            }
+            if (back) {
+                checkIndex--;
+                if (checkIndex < 0) break;
+            } else checkIndex++;
+        }
+        return selected;
+    }
+
+    static getOrientation(pos, key = 0) {
         pos = pos || this.currentPosition;
         let [x, y, w, h] = [0, 0, 0, 0];
         let width = this.windowsList.offsetWidth;
         let height = this.windowsList.offsetHeight;
         switch (pos) {
+            case -1:
             case 1:
                 w = width - 2 * this.offsetPosition;
                 h = height - 2 * this.offsetPosition;
@@ -149,8 +187,16 @@ class WindowController {
                 y = this.offsetPosition;
                 break;
             case 2:
+                w = (width - 3 * this.offsetPosition)/2;
+                h = height - 2 * this.offsetPosition;
+                x = this.offsetPosition + (key%2)*(w + this.offsetPosition);
+                y = this.offsetPosition;
                 break;
             case 4:
+                w = (width - 3 * this.offsetPosition)/2;
+                h = (height - 3 * this.offsetPosition)/2;
+                x = this.offsetPosition + (key%2)*(w + this.offsetPosition);
+                y = this.offsetPosition + Math.floor(key/2)*(h + this.offsetPosition);
                 break;
         }
         return [x, y, w, h];
@@ -160,20 +206,30 @@ class WindowController {
         /**
          * TODO:
          */
+        alert('В разработке');
     }
 
     static openProfile() {
         /**
          * TODO:
          */
+        alert('В разработке');
     }
 
     static open(title, src) {
         if (this.inited) {
             if (!this.layer.isView()) this.layerShow();
-            this.selectedIndex = this.items.length;
-            let [x, y, w, h] = this.getOrientation();
-            this.add(title, src).setXY(x, y).setDimension(w, h).show().focus();
+            let index = this.getIndexElementByTitle(title);
+            let element = null;
+            if (index === null) {
+                this.selectedIndex = this.items.length;
+                let [x, y, w, h] = this.getOrientation(1);
+                element = this.add(title, src).setXY(x, y).setDimension(w, h);
+            } else {
+                this.selectedIndex = index;
+                element = this.items[index];
+            }
+            element.show().focus();
         } else {
             this.init()
                 .then(() => {
@@ -192,21 +248,25 @@ class WindowController {
 
     static closedWindowElement(element) {
         let index = this.getIndexElement(element);
-        if (index > -1) this.items.splice(index, 1);
+        if (index > -1) {
+            this.items.splice(index, 1);
+            let nextIndex = -1;
+            if (index in this.items) nextIndex = index;
+            else if (index > 0) nextIndex = index - 1;
+            if (nextIndex > -1) this.items[nextIndex].focus();
+            else this.selectedIndex = -1;
+        }
     }
 
     static focusedWindowElement(element) {
         if (!this.items.length) return;
         for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i] === element) continue;
+            if (this.items[i] === element) {
+                this.selectedIndex = i;
+                continue;
+            }
             this.items[i].blur();
         }
-    }
-
-    static remove() {
-        /**
-         * TODO:
-         */
     }
 
     static getIndexElement(element) {
@@ -216,5 +276,13 @@ class WindowController {
         }
         return -1;
     } 
+
+    static getIndexElementByTitle(title) {
+        if (!this.items.length) return null;
+        for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].getTitle() === title) return i;
+        }
+        return null;
+    }
     
 }

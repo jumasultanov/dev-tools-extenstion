@@ -49,7 +49,7 @@ export let layer = [
                             {
                                 type: 'element',
                                 name: 'div',
-                                attrs: { class: 'control-element control-user' },
+                                attrs: { class: 'control-element control-profile' },
                             },
                             {
                                 type: 'element',

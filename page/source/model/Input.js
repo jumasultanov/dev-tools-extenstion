@@ -2,6 +2,7 @@ class Input {
 
     events = {
         change: {},
+        changeKB: {},
         move: {}
     }
 
@@ -30,9 +31,10 @@ class Input {
         for (let name in this.events[event]) ActionController.apply(this.events[event][name]);
     }
 
-    set(value) {
+    set(value, kb = false) {
         this.value = value;
         this.trigger('change');
+        if (kb) this.trigger('changeKB');
         return this;
     }
 
@@ -55,21 +57,21 @@ class Input {
     }
 
     add(value) {
-        this.set(this.value.slice(0, this.pos) + value + this.value.slice(this.pos));
+        this.set(this.value.slice(0, this.pos) + value + this.value.slice(this.pos), true);
         this.movePos(this.pos + value.length);
         return this;
     }
 
     deleteLeft(length = 1) {
         if (this.pos) {
-            this.set(this.value.slice(0, this.pos - length) + this.value.slice(this.pos));
+            this.set(this.value.slice(0, this.pos - length) + this.value.slice(this.pos), true);
             this.movePos(this.pos - length);
         }
         return this;
     }
 
     deleteRight(length = 1) {
-        this.set(this.value.slice(0, this.pos) + this.value.slice(this.pos + length));
+        this.set(this.value.slice(0, this.pos) + this.value.slice(this.pos + length), true);
         return this;
     }
 

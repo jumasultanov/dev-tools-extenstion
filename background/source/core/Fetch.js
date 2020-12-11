@@ -1,4 +1,3 @@
-import Exception from '../exception/Exception.js';
 import FetchException from '../exception/FetchException.js';
 
 class Fetch {

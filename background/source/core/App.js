@@ -10,17 +10,17 @@ class App {
     keys;
 
     constructor() {
-        /**
-         * TODO:
-         */
+        
     }
 
     init() {
-        /**
-         * TODO:
-         *  start service
-         */
-        ServiceController.connect();
+        ServiceController.connect()
+            .then(() => {
+
+            })
+            .catch(err => {
+                console.error(err.get());
+            });
         ContentController.connect();
         PopupController.connect();
     }

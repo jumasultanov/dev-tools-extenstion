@@ -22,10 +22,25 @@ class ToolController {
         return false;
     }
 
+    static getByID(id) {
+        let index = this.getIndexByID(id);
+        if (index === false) return null;
+        return this.items[index];
+    }
+
     static search(keywords) {
-        return this.items.reduce((prev, tool) => {
+        if (keywords == 'all') return this.getAll();
+        let items = this.items.reduce((prev, tool) => {
             if (tool.isIncludes(keywords)) return prev.concat(tool.getContentObject());
+            return prev;
         }, []);
+        return items.sort((a, b) => b.priority - a.priority);
+    }
+
+    static getAll() {
+        return this.items.map(tool => {
+            return tool.getContentObject();
+        });
     }
 
 }
