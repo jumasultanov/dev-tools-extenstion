@@ -1,7 +1,9 @@
+/**
+ * Класс для работы с запросами в background
+ */
 class MessageController {
 
-    static items = {};
-
+    //Список событий
     static EVENTS = {
         HOT_KEYS: 'hotKeys',
         COMMANDER_LAYER: 'cmdLayer',
@@ -11,12 +13,19 @@ class MessageController {
         STORY_LIST: 'storyList'
     };
 
+    /**
+     * Предварительный запуск
+     */
     static connect() {
         /**
          * DUMMY
          */
     }
 
+    /**
+     * Запрос для получения основных данных при первом соединении
+     * @return {Promise}
+     */
     static getControlData() {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
@@ -25,6 +34,10 @@ class MessageController {
         });
     }
 
+    /**
+     * Запрос для получения шаблона командной строки
+     * @return {Promise}
+     */
     static getCommanderLayer() {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
@@ -33,6 +46,11 @@ class MessageController {
         });
     }
 
+    /**
+     * Запрос для получения списка инструментов по вхождению подстроки
+     * @param {String} search Поисковая строка
+     * @return {Promise}
+     */
     static getListTools(search) {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
@@ -42,6 +60,11 @@ class MessageController {
         });
     }
 
+    /**
+     * Запрос для получения данных инструмента для запуска окна
+     * @param {Integer} id ИД инструмента
+     * @return {Promise}
+     */
     static toolExec(id) {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
@@ -51,6 +74,10 @@ class MessageController {
         });
     }
 
+    /**
+     * Запрос для получения шаблона менеджера окон
+     * @return {Promise}
+     */
     static getWindowLayer() {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
@@ -59,6 +86,10 @@ class MessageController {
         });
     }
 
+    /**
+     * Запрос для получения истории запусков
+     * @return {Promise}
+     */
     static getStory() {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
