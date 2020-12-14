@@ -1,5 +1,9 @@
+/**
+ * Исключения для объекта Layer
+ */
 class LayerException extends Exception {
 
+    //Константы исключении
     static INPUT_NOT_ARRAY = 40;
     static INPUT_EMPTY = 41;
 
@@ -7,6 +11,10 @@ class LayerException extends Exception {
         super(type, keyword);
     }
 
+    /**
+     * Возвращает название ошибки по ее типу
+     * @return {String}
+     */
     getTypeString() {
         switch (this.type) {
             case LayerException.INPUT_NOT_ARRAY: return 'Для создания слоя передан не массив';
