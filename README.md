@@ -1,3 +1,3 @@
-# dev-tools-extenstion
+# dev-tools-extension
 
-This chrome extenstion for developer tools
+This chrome extension for developer tools
