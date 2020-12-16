@@ -1,5 +1,9 @@
+/**
+ * Класс для работы с пунктом истории
+ */
 class Story {
 
+    //Данные запущенного иснтрумента
     id; name; categories;
 
     constructor(data) {
@@ -8,10 +12,18 @@ class Story {
         this.categories = data.categories;
     }
 
+    /**
+     * Возвращает ID
+     * @return {Number}
+     */
     getID() {
         return this.id;
     }
 
+    /**
+     * Возвращает объект шаблона элемента
+     * @return {Object}
+     */
     getLayerData() {
         return {
             type: 'element',
