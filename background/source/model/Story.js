@@ -1,5 +1,9 @@
+/**
+ * Класс для работы с элементом истории
+ */
 class Story {
 
+    //Данные
     id; name; categories;
 
     constructor(id, name, categories) {
